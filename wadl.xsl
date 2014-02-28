@@ -218,7 +218,7 @@ Mark Sawers <mark.sawers@ipc.com>
                 </a>
               </li>
               <li>
-                <a href="{$resourceBase}/application.wadl">Raw</a>
+                <a href="#" onclick="goToWadl()">Raw</a>
             </li></ul>
           </div>
           <p>

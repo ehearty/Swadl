@@ -2,6 +2,11 @@
   <head>
     <script src="js/jquery.js"></script>
     <script>
+      var xmlDoc = "test_wadls/application.wadl";
+      var xslDoc = "wadl.xsl";
+      function goToWadl(){
+        window.location = xmlDoc;
+      }
       function loadXMLDoc(filename)
       {
         if (window.ActiveXObject)
@@ -21,8 +26,8 @@
 
       function displayResult()
       {
-        xml = loadXMLDoc("test_wadls/application.wadl");
-        xsl = loadXMLDoc("wadl.xsl");
+        xml = loadXMLDoc(xmlDoc);
+        xsl = loadXMLDoc(xslDoc);
         // code for IE
         if (window.ActiveXObject || xhttp.responseType == "msxml-document")
         {
