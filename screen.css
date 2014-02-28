@@ -129,6 +129,7 @@ table {
   max-width: 960px;
   margin-left: auto;
   margin-right: auto;
+  position:relative;
 }
 .swagger-ui-wrap b,
 .swagger-ui-wrap strong {
@@ -1145,6 +1146,7 @@ table {
   font-weight: bold;
   text-decoration: none;
   padding: 20px 0 20px 45px;
+  background: transparent url(swadl.png) no-repeat left center;
   color: white;
 }
 #header img {
@@ -1155,7 +1157,9 @@ table {
 #header form#api_selector {
   display: block;
   clear: none;
-  float: right;
+  position:absolute;
+  top:0px;
+  right:0px;
 }
 #header form#api_selector .input {
   display: block;

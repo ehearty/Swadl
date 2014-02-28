@@ -57,13 +57,22 @@ Mark Sawers <mark.sawers@ipc.com>
         <body>
           <div id="header">
             <div class="swagger-ui-wrap">
-              <img src="swadl.png"></img><a id="logo">Swadl</a>
+              <a id="logo">Swadl</a>
+              <form id="api_selector">
+                <div class="input">
+                  <input placeholder="{$g_resourcesBase}application.wadl" id="input_baseUrl" name="baseUrl" type="text">
+                  </input>
+                </div>
+                <div class="input">
+                  <a id="explore" href="#" onclick="loadWadl()">Swadl it!</a>
+                </div>
+              </form>
             </div>
+            <h1><xsl:call-template name="getTitle"/></h1>
+            <xsl:call-template name="getDoc">
+              <xsl:with-param name="base" select="$g_resourcesBase"/>
+            </xsl:call-template>
           </div>
-          <h1><xsl:call-template name="getTitle"/></h1>
-          <xsl:call-template name="getDoc">
-            <xsl:with-param name="base" select="$g_resourcesBase"/>
-          </xsl:call-template>
 
           <div id="swagger-ui-container" class="swagger-ui-wrap">
 
@@ -200,7 +209,7 @@ Mark Sawers <mark.sawers@ipc.com>
             <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
             <h2>
               <a href="#" onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
-              Operations for <xsl:value-of select="$resourcePath"/>
+                Operations for <xsl:value-of select="$resourcePath"/>
               </a>
             </h2>
             <ul class="options">

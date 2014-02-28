@@ -5,7 +5,13 @@
       var xmlDoc = "test_wadls/application.wadl";
       var xslDoc = "wadl.xsl";
       function goToWadl(){
-        window.location = xmlDoc;
+        var win = window.open(xmlDoc,'_blank');
+        win.focus();
+      }
+      function loadWadl(){
+        xmlDoc = document.getElementById('input_baseUrl').value;
+        $('#example').html('');
+        displayResult();
       }
       function loadXMLDoc(filename)
       {
