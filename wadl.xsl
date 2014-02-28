@@ -56,9 +56,9 @@ Mark Sawers <mark.sawers@ipc.com>
         </head>
         <body>
           <div id="header">
-          <div class="swagger-ui-wrap">
-            <img src="swadl.png"></img><a id="logo">Swadl</a>
-          </div>
+            <div class="swagger-ui-wrap">
+              <img src="swadl.png"></img><a id="logo">Swadl</a>
+            </div>
           </div>
           <h1><xsl:call-template name="getTitle"/></h1>
           <xsl:call-template name="getDoc">
@@ -199,7 +199,9 @@ Mark Sawers <mark.sawers@ipc.com>
           <div class="heading">
             <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
             <h2>
+              <a href="#" onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
               Operations for <xsl:value-of select="$resourcePath"/>
+              </a>
             </h2>
             <ul class="options">
               <li>
@@ -263,6 +265,15 @@ Mark Sawers <mark.sawers@ipc.com>
                           </p>
 
                           <!-- Request -->
+                          <xsl:variable name="fullPath">
+                            <xsl:call-template name="getFullResourcePath">
+                              <xsl:with-param name="base" select="$resourceBase"/>
+                              <xsl:with-param name="path" select="$resourcePath"/>
+                            </xsl:call-template>
+                          </xsl:variable>
+                          <a href="{$fullPath}">
+                            <xsl:value-of select="$fullPath"/>
+                          </a>
                           <xsl:choose>
                             <xsl:when test="wadl:request">
                               <h4>Parameters</h4>
