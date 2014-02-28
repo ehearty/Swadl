@@ -196,7 +196,7 @@ Mark Sawers <mark.sawers@ipc.com>
 
       <xsl:if test="wadl:method">
         <li class="resource">
-          <div class="heading">
+          <div class="heading" onclick="$(this.parentNode.getElementsByClassName('methods')[0]).slideToggle('slow')">
             <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
             <h2>
               Operations for <xsl:value-of select="$resourcePath"/>
@@ -224,7 +224,7 @@ Mark Sawers <mark.sawers@ipc.com>
                   <li class="endpoint">
                     <ul class="operations">
                       <li class="{$name} operation">
-                        <div class="heading">
+                        <div class="heading" onclick="$(this.parentNode.getElementsByClassName('content')[0]).slideToggle('slow')">
                           <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
                           <h3>
                             <span class="http_method">
