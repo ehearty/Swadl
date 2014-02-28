@@ -1143,9 +1143,13 @@ table {
   font-size: 1.5em;
   font-weight: bold;
   text-decoration: none;
-  background: transparent url(../images/logo_small.png) no-repeat left center;
-  padding: 20px 0 20px 40px;
+  padding: 20px 0 20px 45px;
   color: white;
+}
+#header img {
+  height: 40px;
+  position: absolute;
+  top:5px;
 }
 #header form#api_selector {
   display: block;

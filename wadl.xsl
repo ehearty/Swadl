@@ -57,7 +57,7 @@ Mark Sawers <mark.sawers@ipc.com>
         <body>
           <div id="header">
           <div class="swagger-ui-wrap">
-            <a id="logo">Swadl</a>
+            <img src="swadl.png"></img><a id="logo">Swadl</a>
           </div>
           </div>
           <h1><xsl:call-template name="getTitle"/></h1>
