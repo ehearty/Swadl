@@ -196,18 +196,29 @@ Mark Sawers <mark.sawers@ipc.com>
 
       <xsl:if test="wadl:method">
         <li class="resource">
-          <div class="heading" onclick="$(this.parentNode.getElementsByClassName('methods')[0]).slideToggle('slow')">
+          <div class="heading">
             <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
             <h2>
               Operations for <xsl:value-of select="$resourcePath"/>
             </h2>
-            <ul class="options"><li>
-                <a>
-                  <xsl:call-template name="getFullResourcePath">
-                    <xsl:with-param name="base" select="$resourceBase"/>                
-                    <xsl:with-param name="path" select="$resourcePath"/>                
-                  </xsl:call-template>
+            <ul class="options">
+              <li>
+                <a href="#" onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
+                  Show/Hide
                 </a>
+              </li>
+              <li>
+                <a href="#" onclick="$(this).closest('.resource').find('.content').hide();$(this).closest('.resource').children('.methods').slideDown('slow');">
+                  List Operations
+                </a>
+              </li>
+              <li>
+                <a href="#" onclick="$(this).closest('.resource').find('.content').add($(this).closest('.resource').find('.methods')).slideDown('slow')">
+                  Expand Operations
+                </a>
+              </li>
+              <li>
+                <a href="{$resourceBase}/application.wadl">Raw</a>
             </li></ul>
           </div>
           <p>
