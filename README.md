@@ -59,10 +59,13 @@ javadoc, which you should probably be using anyway :-)
 ### Notes
 
   Q: Don't want to show the search bar on top of the page? 
+
   A: Update #header in screen.css with display:none.
 
 
+
   Q: Nothing loads when I use the search bar?! 
+
   A: This might be due to several reasons:
       ** The transform sheet wasn't able to parse the wadl that you provided.
       That's probably my fault, and I'd be happy to fix the bug if you let me
@@ -75,5 +78,6 @@ javadoc, which you should probably be using anyway :-)
 
 
   Q: What do I do if I find a problem?
+
   A: Submit an issue in Git. Better yet, fork the repo, fix the bug, and send
   me a pull request ;-)
