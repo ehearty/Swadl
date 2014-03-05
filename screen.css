@@ -1246,3 +1246,10 @@ table {
   color:#0f6ab4;
   font-weight:bold;
 }
+
+.error{
+  width:100%;
+  text-align:center;
+  color:red;
+  font-family:arial;
+}
