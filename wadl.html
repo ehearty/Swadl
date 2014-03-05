@@ -13,7 +13,6 @@
         win.focus();
       }
       function loadWadl(){
-        $('#input_baseUrl').attr('placeholder',xmlDoc);
         xmlDoc = document.getElementById('input_baseUrl').value;
         $('#example').html('');
         displayResult();
@@ -37,6 +36,7 @@
 
       function displayResult()
       {
+        $('#input_baseUrl').attr('placeholder',xmlDoc);
         xml = loadXMLDoc(xmlDoc);
         xsl = loadXMLDoc(xslDoc);
         // code for IE
