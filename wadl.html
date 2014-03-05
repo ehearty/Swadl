@@ -5,7 +5,7 @@
     <title>Swadl API documentation generator</title>
     <script src="js/jquery.js"></script>
     <script>
-      var xmlDoc = "test_wadls/application.wadl";
+      var xmlDoc = "test.wadl";
       var xslDoc = "wadl.xsl";
       var grammarDefs = {};
       function goToWadl(){
@@ -13,6 +13,7 @@
         win.focus();
       }
       function loadWadl(){
+        $('#input_baseUrl').attr('placeholder',xmlDoc);
         xmlDoc = document.getElementById('input_baseUrl').value;
         $('#example').html('');
         displayResult();
@@ -94,7 +95,7 @@
         <a id="logo">Swadl</a>
         <form id="api_selector">
           <div class="input">
-            <input placeholder="application.wadl" id="input_baseUrl" name="baseUrl" type="text">
+            <input id="input_baseUrl" name="baseUrl" type="text">
             </input>
           </div>
           <div class="input">
