@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="helloModel" type="helloModel"/>
+
+  <xs:complexType name="helloModel">
+    <xs:sequence>
+      <xs:element name="hello" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

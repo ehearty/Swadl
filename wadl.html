@@ -1,9 +1,13 @@
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <link href="screen.css" media="screen" rel="stylesheet" type="text/css"></link>
+    <title>Swadl API documentation generator</title>
     <script src="js/jquery.js"></script>
     <script>
       var xmlDoc = "test_wadls/application.wadl";
       var xslDoc = "wadl.xsl";
+      var grammarDefs = {};
       function goToWadl(){
         var win = window.open(xmlDoc,'_blank');
         win.focus();
@@ -47,11 +51,61 @@
           xsltProcessor.importStylesheet(xsl);
           resultDocument = xsltProcessor.transformToFragment(xml, document);
           document.getElementById("example").appendChild(resultDocument);
+          $(".grammar").each(function(index,arr){addGrammar($(arr).attr('href'),'xsd.xsl');});
+          /* Add the defs in somehow */
+          $(".schema_def").each(function(index,el){
+            var target = $(el).attr('target');
+            $(target).append($(el).html());
+            $(target).children('.schema_link').addClass('active_schema_link');
+          });
+          $(".active_schema_link").click(function(){
+            var target = $(this).parent().children('.model-signature');
+            if (!target.is(":visible")){
+              $(this).closest('.description').find('.model-signature').hide('slow');
+            }
+            $(this).parent().children('.model-signature').slideToggle('slow');
+          });
         }
+      }
+
+      function addGrammar(xmlGrammarDoc, xslGrammarDoc)
+      {
+        var xmlGrammar = loadXMLDoc(xmlGrammarDoc);
+        var xslGrammar = loadXMLDoc(xslGrammarDoc);
+        // code for IE
+        if (window.ActiveXObject || xhttp.responseType == "msxml-document")
+        {
+          ex = xmlGrammar.transformNode(xslGrammar);
+        }
+        // code for Chrome, Firefox, Opera, etc.
+        else if (document.implementation && document.implementation.createDocument)
+        {
+          xsltProcessor = new XSLTProcessor();
+          xsltProcessor.importStylesheet(xslGrammar);
+          resultDocument = xsltProcessor.transformToFragment(xmlGrammar, document);
+        }
+        $('#grammars').append(resultDocument);
       }
     </script>
   </head>
   <body onload="displayResult()">
-    <div id="example" />
-    </body>
-  </html>
+    <div id="header">
+      <div class="swagger-ui-wrap">
+        <a id="logo">Swadl</a>
+        <form id="api_selector">
+          <div class="input">
+            <input placeholder="application.wadl" id="input_baseUrl" name="baseUrl" type="text">
+            </input>
+          </div>
+          <div class="input">
+            <a id="explore" onclick="loadWadl()">Swadl it!</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="example">
+    </div>
+    <div id="grammars">
+    </div>
+  </body>
+</html>

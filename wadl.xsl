@@ -48,91 +48,68 @@ Mark Sawers <mark.sawers@ipc.com>
 
     <!-- Template for top-level doc element -->
     <xsl:template match="wadl:application">
-      <html>
-        <head>
-          <meta charset="UTF-8" />
-          <xsl:call-template name="getStyle"/>
-          <title><xsl:call-template name="getTitle"/></title>
-        </head>
-        <body>
-          <div id="header">
-            <div class="swagger-ui-wrap">
-              <a id="logo">Swadl</a>
-              <form id="api_selector">
-                <div class="input">
-                  <input placeholder="{$g_resourcesBase}application.wadl" id="input_baseUrl" name="baseUrl" type="text">
-                  </input>
-                </div>
-                <div class="input">
-                  <a id="explore" href="#" onclick="loadWadl()">Swadl it!</a>
-                </div>
-              </form>
+      <div id="swagger-ui-container" class="swagger-ui-wrap">
+        <h1><xsl:call-template name="getTitle"/></h1>
+        <xsl:call-template name="getDoc">
+          <xsl:with-param name="base" select="$g_resourcesBase"/>
+        </xsl:call-template>
+
+
+        <!-- Summary -->
+        <div id="info" class="api-info">
+          <h2>Summary</h2>
+          <table>
+            <div class="info-title">
+              <tr>
+                <th>Resource</th>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
             </div>
-            <h1><xsl:call-template name="getTitle"/></h1>
+            <div class="info-description">
+              <xsl:for-each select="wadl:resources/wadl:resource">
+                <xsl:call-template name="processResourceSummary">
+                  <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
+                  <xsl:with-param name="resourcePath" select="@path"/>
+                  <xsl:with-param name="lastResource" select="position() = last()"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </div>
+          </table>
+          <p></p>
+        </div>
+
+        <!-- Grammars -->
+        <xsl:if test="wadl:grammars/wadl:include">
+          <h2>Grammars</h2>
+          <p>
+            <xsl:for-each select="wadl:grammars/wadl:include">
+              <xsl:variable name="href" select="@href"/>
+              <a target="_blank" href="{$href}" class="grammar"><xsl:value-of select="$href"/></a>
+              <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
+            </xsl:for-each>
+          </p>
+        </xsl:if>
+
+        <ul id="resources">
+
+          <!-- Detail -->
+          <xsl:for-each select="wadl:resources">
             <xsl:call-template name="getDoc">
               <xsl:with-param name="base" select="$g_resourcesBase"/>
             </xsl:call-template>
-          </div>
+          </xsl:for-each>
 
-          <div id="swagger-ui-container" class="swagger-ui-wrap">
+          <xsl:for-each select="wadl:resources/wadl:resource">
+            <xsl:call-template name="processResourceDetail">
+              <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
+              <xsl:with-param name="resourcePath" select="@path"/>
+              <xsl:with-param name="baseName" select="@path"/>
+            </xsl:call-template>
+          </xsl:for-each>
+        </ul>
+      </div>
 
-            <!-- Summary -->
-            <div id="info" class="api-info">
-              <h2>Summary</h2>
-              <table>
-                <div class="info-title">
-                  <tr>
-                    <th>Resource</th>
-                    <th>Method</th>
-                    <th>Description</th>
-                  </tr>
-                </div>
-                <div class="info-description">
-                  <xsl:for-each select="wadl:resources/wadl:resource">
-                    <xsl:call-template name="processResourceSummary">
-                      <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
-                      <xsl:with-param name="resourcePath" select="@path"/>
-                      <xsl:with-param name="lastResource" select="position() = last()"/>
-                    </xsl:call-template>
-                  </xsl:for-each>
-                </div>
-              </table>
-              <p></p>
-            </div>
-
-            <!-- Grammars -->
-            <xsl:if test="wadl:grammars/wadl:include">
-              <h2>Grammars</h2>
-              <p>
-                <xsl:for-each select="wadl:grammars/wadl:include">
-                  <xsl:variable name="href" select="@href"/>
-                  <a href="{$href}"><xsl:value-of select="$href"/></a>
-                  <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
-                </xsl:for-each>
-              </p>
-            </xsl:if>
-
-            <ul id="resources">
-
-              <!-- Detail -->
-              <h2 class="info_title">Resources</h2>
-              <xsl:for-each select="wadl:resources">
-                <xsl:call-template name="getDoc">
-                  <xsl:with-param name="base" select="$g_resourcesBase"/>
-                </xsl:call-template>
-              </xsl:for-each>
-
-              <xsl:for-each select="wadl:resources/wadl:resource">
-                <xsl:call-template name="processResourceDetail">
-                  <xsl:with-param name="resourceBase" select="$g_resourcesBase"/>
-                  <xsl:with-param name="resourcePath" select="@path"/>
-                </xsl:call-template>
-              </xsl:for-each>
-            </ul>
-          </div>
-
-        </body>
-      </html>
     </xsl:template>
 
     <!-- Supporting templates (functions) -->
@@ -202,116 +179,98 @@ Mark Sawers <mark.sawers@ipc.com>
     <xsl:template name="processResourceDetail">
       <xsl:param name="resourceBase"/>
       <xsl:param name="resourcePath"/>
+      <xsl:param name="baseName"/>
 
-      <xsl:if test="wadl:method">
-        <li class="resource">
-          <div class="heading">
-            <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
-            <h2>
-              <a href="#" onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
-                Operations for <xsl:value-of select="$resourcePath"/>
+      <li class="resource">
+        <div class="heading">
+          <xsl:variable name="id"><xsl:call-template name="getId"/></xsl:variable>
+          <h2>
+            <a onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
+              Operations for <xsl:value-of select="$baseName"/>
+            </a>
+          </h2>
+          <ul class="options">
+            <li>
+              <a onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
+                Show/Hide
               </a>
-            </h2>
-            <ul class="options">
-              <li>
-                <a href="#" onclick="$(this).closest('.resource').children('.methods').slideToggle('slow')">
-                  Show/Hide
-                </a>
-              </li>
-              <li>
-                <a href="#" onclick="$(this).closest('.resource').find('.content').hide();$(this).closest('.resource').children('.methods').slideDown('slow');">
-                  List Operations
-                </a>
-              </li>
-              <li>
-                <a href="#" onclick="$(this).closest('.resource').find('.content').add($(this).closest('.resource').find('.methods')).slideDown('slow')">
-                  Expand Operations
-                </a>
-              </li>
-              <li>
-                <a href="#" onclick="goToWadl()">Raw</a>
-            </li></ul>
-          </div>
+            </li>
+            <li>
+              <a onclick="$(this).closest('.resource').find('.content').hide();$(this).closest('.resource').children('.methods').slideDown('slow');">
+                List Operations
+              </a>
+            </li>
+            <li>
+              <a onclick="$(this).closest('.resource').find('.content').add($(this).closest('.resource').find('.methods')).slideDown('slow')">
+                Expand Operations
+              </a>
+            </li>
+            <li>
+              <a onclick="goToWadl()">Raw</a>
+          </li></ul>
+        </div>
+        <div class="methods">
           <p>
             <xsl:call-template name="getDoc">
               <xsl:with-param name="base" select="$resourceBase"/>
             </xsl:call-template>
           </p>
 
-          <div class="methods">
-            <xsl:for-each select="wadl:method">
-              <xsl:variable name="name" select="@name"/>
-              <div class="method">
-                <ul class="endpoints">
-                  <li class="endpoint">
-                    <ul class="operations">
-                      <li class="{$name} operation">
-                        <div class="heading" onclick="$(this.parentNode.getElementsByClassName('content')[0]).slideToggle('slow')">
-                          <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
-                          <h3>
-                            <span class="http_method">
-                              <a name="{$id2}"><xsl:value-of select="$name"/></a>
-                            </span>
-                            <span class="path">
-                              <a>
-                                <xsl:value-of select="$resourcePath"/>
-                              </a>
-                            </span>
-                          </h3>
-                          <ul class="options">
-                            <li>
-                              <xsl:if test="@id">
-                                <xsl:value-of select="@id"/>() 
-                              </xsl:if>
-                            </li>
-                          </ul>
-                        </div>
-                        <div class="content">
-                          <p>
-                            <xsl:call-template name="getDoc">
-                              <xsl:with-param name="base" select="$resourceBase"/>
-                            </xsl:call-template>
-                          </p>
 
-                          <!-- Request -->
-                          <xsl:variable name="fullPath">
-                            <xsl:call-template name="getFullResourcePath">
-                              <xsl:with-param name="base" select="$resourceBase"/>
-                              <xsl:with-param name="path" select="$resourcePath"/>
-                            </xsl:call-template>
-                          </xsl:variable>
-                          <a href="{$fullPath}">
-                            <xsl:value-of select="$fullPath"/>
-                          </a>
-                          <xsl:choose>
-                            <xsl:when test="wadl:request">
-                              <h4>Parameters</h4>
-                              <div style="margin-left: 2em">  <!-- left indent -->
-                                <xsl:for-each select="wadl:request">
-                                  <xsl:call-template name="getParamBlock">
-                                    <xsl:with-param name="style" select="'template'"/>
-                                  </xsl:call-template>
+          <xsl:for-each select="current()//wadl:method">
+            <xsl:variable name="name" select="@name"/>
+            <xsl:variable name="subPath">
+              <xsl:call-template name="getParentPath">
+                <xsl:with-param name="subNode" select="parent::node()"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <div class="method">
+              <ul class="endpoints">
+                <li class="endpoint">
+                  <ul class="operations">
+                    <li class="{$name} operation">
+                      <div class="heading" onclick="$(this.parentNode.getElementsByClassName('content')[0]).slideToggle('slow')">
+                        <xsl:variable name="id2"><xsl:call-template name="getId"/></xsl:variable>
+                        <h3>
+                          <span class="http_method">
+                            <a name="{$id2}"><xsl:value-of select="@name"/></a>
+                          </span>
+                          <span class="path">
+                            <a>
+                              <xsl:value-of select="$subPath"/>
+                            </a>
+                          </span>
+                        </h3>
+                        <ul class="options">
+                          <li>
+                            <xsl:if test="@id">
+                              <xsl:value-of select="@id"/>() 
+                            </xsl:if>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="content">
+                        <p>
+                          <xsl:call-template name="getDoc">
+                            <xsl:with-param name="base" select="$resourceBase"/>
+                          </xsl:call-template>
+                        </p>
 
-                                  <xsl:call-template name="getParamBlock">
-                                    <xsl:with-param name="style" select="'matrix'"/>
-                                  </xsl:call-template>
-
-                                  <xsl:call-template name="getParamBlock">
-                                    <xsl:with-param name="style" select="'header'"/>
-                                  </xsl:call-template>
-
-                                  <xsl:call-template name="getParamBlock">
-                                    <xsl:with-param name="style" select="'query'"/>
-                                  </xsl:call-template>
-
-                                  <xsl:call-template name="getRepresentations"/>
-                                </xsl:for-each> <!-- wadl:request -->
-                              </div>  <!-- left indent for request -->
-                            </xsl:when>
-
-                            <xsl:when test="not(wadl:request) and (ancestor::wadl:*/wadl:param)">
-                              <h4>Parameters</h4>
-                              <div style="margin-left: 2em">  <!-- left indent -->
+                        <!-- Request -->
+                        <xsl:variable name="fullPath">
+                          <xsl:call-template name="getFullResourcePath">
+                            <xsl:with-param name="base" select="$resourceBase"/>
+                            <xsl:with-param name="path" select="$subPath"/>
+                          </xsl:call-template>
+                        </xsl:variable>
+                        <a target="_blank" href="{$fullPath}">
+                          <xsl:value-of select="$fullPath"/>
+                        </a>
+                        <xsl:choose>
+                          <xsl:when test="wadl:request">
+                            <h4>Parameters</h4>
+                            <div style="margin-left: 2em">  <!-- left indent -->
+                              <xsl:for-each select="wadl:request">
                                 <xsl:call-template name="getParamBlock">
                                   <xsl:with-param name="style" select="'template'"/>
                                 </xsl:call-template>
@@ -329,85 +288,106 @@ Mark Sawers <mark.sawers@ipc.com>
                                 </xsl:call-template>
 
                                 <xsl:call-template name="getRepresentations"/>
-                              </div>  <!-- left indent for request -->
-                            </xsl:when>
+                              </xsl:for-each> <!-- wadl:request -->
+                            </div>  <!-- left indent for request -->
+                          </xsl:when>
 
-                            <xsl:otherwise>
-                            </xsl:otherwise>
-                          </xsl:choose>
+                          <xsl:when test="not(wadl:request) and (ancestor::wadl:*/wadl:param)">
+                            <h4>Parameters</h4>
+                            <div style="margin-left: 2em">  <!-- left indent -->
+                              <xsl:call-template name="getParamBlock">
+                                <xsl:with-param name="style" select="'template'"/>
+                              </xsl:call-template>
 
-                          <!-- Response -->
-                          <xsl:choose>
-                            <xsl:when test="wadl:response">
-                              <h4>Responses</h4>
-                              <div style="margin-left: 2em">  <!-- left indent -->
-                                <xsl:for-each select="wadl:response">
-                                  <div class="h8">status: </div>
-                                  <xsl:choose>
-                                    <xsl:when test="@status">
-                                      <xsl:value-of select="@status"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                      200 - OK
-                                    </xsl:otherwise>
-                                  </xsl:choose>
-                                  <xsl:for-each select="wadl:doc">
-                                    <xsl:if test="@title">
-                                      - <xsl:value-of select="@title"/>
-                                    </xsl:if>
-                                    <xsl:if test="text()">
-                                      - <xsl:value-of select="text()"/>
-                                    </xsl:if>
-                                  </xsl:for-each>
+                              <xsl:call-template name="getParamBlock">
+                                <xsl:with-param name="style" select="'matrix'"/>
+                              </xsl:call-template>
 
-                                  <!-- Get response headers/representations -->
-                                  <xsl:if test="wadl:param or wadl:representation">
-                                    <div style="margin-left: 2em"> <!-- left indent -->
-                                      <xsl:if test="wadl:param">
-                                        <div class="h7">headers</div>
-                                        <table>
-                                          <xsl:for-each select="wadl:param[@style='header']">
-                                            <xsl:call-template name="getParams"/>
-                                          </xsl:for-each>
-                                        </table>
-                                      </xsl:if>
+                              <xsl:call-template name="getParamBlock">
+                                <xsl:with-param name="style" select="'header'"/>
+                              </xsl:call-template>
 
-                                      <xsl:call-template name="getRepresentations"/>
-                                    </div>  <!-- left indent for response headers/representations -->
+                              <xsl:call-template name="getParamBlock">
+                                <xsl:with-param name="style" select="'query'"/>
+                              </xsl:call-template>
+
+                              <xsl:call-template name="getRepresentations"/>
+                            </div>  <!-- left indent for request -->
+                          </xsl:when>
+
+                          <xsl:otherwise>
+                          </xsl:otherwise>
+                        </xsl:choose>
+
+                        <!-- Response -->
+                        <xsl:choose>
+                          <xsl:when test="wadl:response">
+                            <h4>Responses</h4>
+                            <div style="margin-left: 2em">  <!-- left indent -->
+                              <xsl:for-each select="wadl:response">
+                                <div class="h8">status: </div>
+                                <xsl:choose>
+                                  <xsl:when test="@status">
+                                    <xsl:value-of select="@status"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    200 - OK
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                                <xsl:for-each select="wadl:doc">
+                                  <xsl:if test="@title">
+                                    - <xsl:value-of select="@title"/>
                                   </xsl:if>
-                                </xsl:for-each> <!-- wadl:response -->
-                              </div>
-                            </xsl:when>
-                            <xsl:otherwise>
-                            </xsl:otherwise>
-                          </xsl:choose>                
-                        </div>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
+                                  <xsl:if test="text()">
+                                    - <xsl:value-of select="text()"/>
+                                  </xsl:if>
+                                </xsl:for-each>
 
-              </div>  <!-- class=method -->
-            </xsl:for-each> <!-- wadl:method  -->
+                                <!-- Get response headers/representations -->
+                                <xsl:if test="wadl:param or wadl:representation">
+                                  <div style="margin-left: 2em"> <!-- left indent -->
+                                    <xsl:if test="wadl:param">
+                                      <div class="h7">headers</div>
+                                      <table>
+                                        <xsl:for-each select="wadl:param[@style='header']">
+                                          <xsl:call-template name="getParams"/>
+                                        </xsl:for-each>
+                                      </table>
+                                    </xsl:if>
 
-          </div> <!-- class=methods -->
-        </li>
+                                    <xsl:call-template name="getRepresentations"/>
+                                  </div>  <!-- left indent for response headers/representations -->
+                                </xsl:if>
+                              </xsl:for-each> <!-- wadl:response -->
+                            </div>
+                          </xsl:when>
+                          <xsl:otherwise>
+                          </xsl:otherwise>
+                        </xsl:choose>                
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
 
-      </xsl:if>   <!-- wadl:method -->
+            </div>  <!-- class=method -->
+          </xsl:for-each> <!-- wadl:method  -->
 
-      <!-- Call recursively for child resources -->
-      <xsl:for-each select="wadl:resource">
-        <xsl:variable name="base">
-          <xsl:call-template name="getFullResourcePath">
-            <xsl:with-param name="base" select="$resourceBase"/>                
-            <xsl:with-param name="path" select="$resourcePath"/>           
+        </div> <!-- class=methods -->
+      </li>
+
+    </xsl:template>
+
+    <xsl:template name="getParentPath">
+      <xsl:param name="subNode"/>
+      <xsl:if test="$subNode/@path">
+        <xsl:if test="$subNode/../@path">
+          <xsl:call-template name="getParentPath">
+            <xsl:with-param name="subNode" select="$subNode/.."/>
           </xsl:call-template>
-        </xsl:variable>
-        <xsl:call-template name="processResourceDetail">
-          <xsl:with-param name="resourceBase" select="$base"/>
-          <xsl:with-param name="resourcePath" select="@path"/>
-        </xsl:call-template>
-      </xsl:for-each> <!-- wadl:resource -->
+        </xsl:if>
+        <xsl:value-of select="$subNode/@path"/>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template name="getFullResourcePath">
@@ -533,7 +513,11 @@ Mark Sawers <mark.sawers@ipc.com>
           <a href="{$ns-uri}#{$localname}"><xsl:value-of select="$localname"/></a>
         </xsl:when>
         <xsl:when test="$qname">
-          <xsl:value-of select="$qname"/>
+          <span class="active_schema schema_{$qname}">
+            <a onclick="" class="schema_link">
+              <xsl:value-of select="$qname"/>
+            </a>
+          </span>
         </xsl:when>
       </xsl:choose>
     </xsl:template>
@@ -610,9 +594,6 @@ Mark Sawers <mark.sawers@ipc.com>
       </xsl:if>
     </xsl:template>
 
-    <xsl:template name="getStyle">
-      <link href="screen.css" media="screen" rel="stylesheet" type="text/css"></link>
-    </xsl:template>
 
     <xsl:template name="getTitle">
       <xsl:choose>

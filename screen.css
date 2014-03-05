@@ -386,8 +386,8 @@ table {
   color: #000;
   font-size: .9em;
 }
-.swagger-ui-wrap .model-signature .description div {
-  font-size: 0.9em;
+.swagger-ui-wrap .model-signature .description .indent {
+  font-size: 12px;
   line-height: 1.5em;
   margin-left: 1em;
 }
@@ -1220,3 +1220,29 @@ table {
   display:none;
 }
 
+.schema_content{
+  display:none;
+}
+
+#grammars {
+  display:none;
+}
+
+.model-signature{
+  display:none;
+}
+
+.active_schema .active_schema_link{
+/*  color:#0f6ab4;
+ */
+  font-weight:bold;
+}
+
+.active_schema .active_schema_link:hover{
+  text-decoration:underline;
+}
+
+.swagger-ui-wrap .model-signature .active_schema_link .propType {
+  color:#0f6ab4;
+  font-weight:bold;
+}
