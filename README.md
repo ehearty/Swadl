@@ -67,13 +67,13 @@ javadoc, which you should probably be using anyway :-)
   Q: Nothing loads when I use the search bar?! 
 
   A: This might be due to several reasons:
-      ** The transform sheet wasn't able to parse the wadl that you provided.
+* The transform sheet wasn't able to parse the wadl that you provided.
       That's probably my fault, and I'd be happy to fix the bug if you let me
       know.
-      ** There might be a cross domain restriction on the page. These are a
+* There might be a cross domain restriction on the page. These are a
       pain to address, imho, and it's why I suggest hosting Swadl on the same
       domain as your wadl resources.
-      ** The page might not be able to reach the link (maybe it's on a
+* The page might not be able to reach the link (maybe it's on a
       vpn...or you fat-fingered the url). 
 
 
