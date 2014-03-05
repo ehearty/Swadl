@@ -21,7 +21,15 @@
       function loadWadl(){
         xmlDoc = document.getElementById('input_baseUrl').value;
         $('#example').html('');
-        displayResult();
+        $('#grammars').html('');
+        $('#message').html('');
+        try{
+          displayResult();
+        }
+        catch (e){
+          console.log(e);
+          $('#message').html("Unable to load wadl. Check cross-domain compatibility.");
+        }
       }
       function loadXMLDoc(filename)
       {
@@ -33,7 +41,9 @@
         {
           xhttp = new XMLHttpRequest();
         }
-        xhttp.overrideMimeType('text/xml');
+        if (xhttp.overrideMimeType){
+          xhttp.overrideMimeType('text/xml');
+        }
         xhttp.open("GET", filename, false);
         try {xhttp.responseType = "msxml-document"} catch(err) {} // Helping IE11
         xhttp.send("");
@@ -42,7 +52,7 @@
 
       function displayResult()
       {
-        $('#input_baseUrl').attr('placeholder',xmlDoc);
+        $('#input_baseUrl').attr('value',xmlDoc);
         xml = loadXMLDoc(xmlDoc);
         xsl = loadXMLDoc(xslDoc);
         // code for IE
@@ -110,6 +120,7 @@
         </form>
       </div>
     </div>
+    <div id="message" class="error"></div>
     <div id="example">
     </div>
     <div id="grammars">
