@@ -48,7 +48,7 @@ Mark Sawers <mark.sawers@ipc.com>
 
     <!-- Template for top-level doc element -->
     <xsl:template match="wadl:application">
-      <div id="swagger-ui-container" class="swagger-ui-wrap">
+      <div id="swadl-ui-container" class="swadl-ui-wrap">
         <h1><xsl:call-template name="getTitle"/></h1>
         <xsl:call-template name="getDoc">
           <xsl:with-param name="base" select="$g_resourcesBase"/>
