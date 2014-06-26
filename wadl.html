@@ -11,7 +11,7 @@
 
       /** END CHANGES **/
 
-      var xslDoc = "wadl.xsl";
+      var xslDoc = "wadl.xsl?"+Math.random();
       var grammarDefs = {};
       function goToWadl(){
         var win = window.open(xmlDoc,'_blank');
@@ -112,7 +112,10 @@
             });
           });
           foreach(document.getElementsByClassName('active_schema_link'),function(el){el.onclick=function(){slideToggle(this,'model-signature');}});
-          foreach(document.getElementsByClassName('slider'),function(el){el.addEventListener('webkitTransitionEnd',function(){endTransition(el);});});
+          foreach(document.getElementsByClassName('slider'),function(el){
+            el.addEventListener('webkitTransitionEnd',function(){endTransition(el);});
+            el.addEventListener('transitionend',function(){endTransition(el);});
+          });
         }
       }
 
