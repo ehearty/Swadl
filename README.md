@@ -53,12 +53,12 @@ working example.
 Swadl works best when deployed as part of your web service. Point it to the
 auto-generated wadl and you'll always have up-to-date documentation.
 
-Use Jersey's extended wadl annotations. They're great, and use plain vanilla
-javadoc, which you should probably be using anyway :-)
+Use Jersey's extended wadl annotations. They're great, use plain vanilla
+javadoc, etc.
 
 ### Notes
 
-Q: Don't want to show the search bar on top of the page? 
+Q: How do I get rid of the search bar at the top of the page?
 
   A: Update #header in screen.css with display:none.
 

@@ -3,7 +3,6 @@
     <meta charset="UTF-8" />
     <link href="screen.css" media="screen" rel="stylesheet" type="text/css"></link>
     <title>Swadl API documentation generator</title>
-    <script src="js/jquery.js"></script>
     <script>
 
       /** POINT TO YOUR WADL **/
@@ -12,7 +11,7 @@
 
       /** END CHANGES **/
 
-      var xslDoc = "wadl.xsl";
+      var xslDoc = "wadl.xsl?"+Math.random();
       var grammarDefs = {};
       function goToWadl(){
         var win = window.open(xmlDoc,'_blank');
@@ -20,15 +19,15 @@
       }
       function loadWadl(){
         xmlDoc = document.getElementById('input_baseUrl').value;
-        $('#example').html('');
-        $('#grammars').html('');
-        $('#message').html('');
+        document.getElementById('example').innerHTML = '';
+        document.getElementById('grammars').innerHTML = '';
+        document.getElementById('message').innerHTML = '';
         try{
           displayResult();
         }
         catch (e){
           console.log(e);
-          $('#message').html("Unable to load wadl. Check cross-domain compatibility.");
+          document.getElementById('message').innerHTML = "Unable to load wadl. Check cross-domain compatibility.";
         }
       }
       function loadXMLDoc(filename)
@@ -50,9 +49,44 @@
         return xhttp.responseXML;
       }
 
+      function foreach(list,callback){
+        for (var i=0; i<list.length; i++){
+          callback(list[i]);
+        }
+      }
+
+      function slide(el){
+        if (el.style.height == 'auto') el.style.height = el.scrollHeight+'px';
+        var height = el.opened ? el.scrollHeight+'px' : '0px';
+        if (el.style.height == height){
+          endTransition(el);
+        }
+        else{
+          setTimeout(function(){el.style.setProperty("transition","1s");setTimeout(function(){el.style.height=height;},10);},10);
+        }
+      }
+
+      function slideToggle(el,className,force,callback){
+        while (el && (!el.getAttribute('class') || (el.getAttribute('class') && !el.getAttribute('class').match('slideContainer')))){
+          el = el.parentNode;
+        }
+        foreach(el.getElementsByClassName(className),function(el){el.callback = callback; el.opened = (typeof force!='undefined' ? force : !el.opened); slide(el);});
+      }
+
+      function endTransition(el){
+        el.style.removeProperty("transition");
+        if (el.opened){
+          setTimeout(function(){el.style.height = "auto";},0);
+        }
+        if (el.callback){ 
+          el.callback();
+          el.callback = null;
+        }
+      }
+
       function displayResult()
       {
-        $('#input_baseUrl').attr('value',xmlDoc);
+        document.getElementById('input_baseUrl').setAttribute('value',xmlDoc);
         xml = loadXMLDoc(xmlDoc);
         xsl = loadXMLDoc(xslDoc);
         // code for IE
@@ -68,19 +102,19 @@
           xsltProcessor.importStylesheet(xsl);
           resultDocument = xsltProcessor.transformToFragment(xml, document);
           document.getElementById("example").appendChild(resultDocument);
-          $(".grammar").each(function(index,arr){addGrammar($(arr).attr('href'),'xsd.xsl');});
-          /* Add the defs in somehow */
-          $(".schema_def").each(function(index,el){
-            var target = $(el).attr('target');
-            $(target).append($(el).html());
-            $(target).children('.schema_link').addClass('active_schema_link');
+          foreach(document.getElementsByClassName('grammar'),function(el){addGrammar(el.getAttribute('href'),'xsd.xsl');});
+          foreach(document.getElementsByClassName('schema_def'),function(el){
+            var target = el.getAttribute('target');
+            var content = el.innerHTML;
+            foreach(document.getElementsByClassName(target),function(el){
+              el.innerHTML += content;
+              foreach(el.getElementsByClassName('schema_link'),function(el){el.className+=" active_schema_link";});
+            });
           });
-          $(".active_schema_link").click(function(){
-            var target = $(this).parent().children('.model-signature');
-            if (!target.is(":visible")){
-              $(this).closest('.description').find('.model-signature').hide('slow');
-            }
-            $(this).parent().children('.model-signature').slideToggle('slow');
+          foreach(document.getElementsByClassName('active_schema_link'),function(el){el.onclick=function(){slideToggle(this,'model-signature');}});
+          foreach(document.getElementsByClassName('slider'),function(el){
+            el.addEventListener('webkitTransitionEnd',function(){endTransition(el);});
+            el.addEventListener('transitionend',function(){endTransition(el);});
           });
         }
       }
@@ -101,7 +135,7 @@
           xsltProcessor.importStylesheet(xslGrammar);
           resultDocument = xsltProcessor.transformToFragment(xmlGrammar, document);
         }
-        $('#grammars').append(resultDocument);
+        document.getElementById('grammars').appendChild(resultDocument);
       }
     </script>
   </head>
