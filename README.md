@@ -28,6 +28,9 @@ Edit the name and location of the xmlDoc variable at the top of the header
 section to point to your wadl. The variable currently points to test.wadl as a
 working example. 
 
+### Changes since release 1.0
+
+* I got rid of jquery and rolled my own slide transitions instead. This means that the new version *might* not be compatible with older browsers. If that's the case, and you're unhappy about it, download release 1.0 instead. Then feel free to shoot me an angry email at your earliest convenience.
 
 ### Breakdown
 
@@ -40,8 +43,6 @@ working example.
 * xsd.xsl - This file processes secondary grammar files associated with
   the wadl. Class definitions are injected into the document *after* wadl.xsl
   has finished processing.
-* js/ - Directory containing jquery library...and future home of the
-  controller library.
 * application.wadl/ - Directory containing the grammar file associated with
   test.wadl. Only for test purposes.
 * test.wadl - Sample hello world wadl file with associated grammar. This wadl
