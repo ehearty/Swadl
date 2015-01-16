@@ -32,6 +32,10 @@ working example.
 
 * I got rid of jquery and rolled my own slide transitions instead. This means that the new version *might* not be compatible with older browsers. If that's the case, and you're unhappy about it, download release 1.0 instead. Then feel free to shoot me an angry email at your earliest convenience.
 
+### Where does this work?
+
+Swadl has been tested in Chrome, Safari, and Firefox. I have no way to test on IE at the moment, so I'm going to assume it doesn't work there. If anyone's out there who has acesss to a windows machine and would like to contribute to the compatibility effort, shoot me an email.
+
 ### Breakdown
 
 * screen.css - Edit this to change the style, format, whatever...you'll
