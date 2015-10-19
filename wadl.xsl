@@ -272,7 +272,7 @@ Mark Sawers <mark.sawers@ipc.com>
                               <h4>Parameters</h4>
                               <div style="margin-left: 2em">  <!-- left indent -->
                                 <table path="{$fullPath}" method="{@name}" class="paramTable">
-                                  <tr style="font-size:16px"><td>Name</td><td class="paramValue">Value</td><td>Data Type</td><td>Parameter Type</td><td>Media Type</td><td>Description</td></tr>
+                                  <tr style="font-size:16px"><td>Name</td><td class="swadl-client">Value</td><td>Data Type</td><td>Parameter Type</td><td>Media Type</td><td>Description</td></tr>
                                   <xsl:for-each select="wadl:request">
                                     <xsl:call-template name="getParamBlock">
                                       <xsl:with-param name="style" select="'template'"/>
@@ -300,7 +300,7 @@ Mark Sawers <mark.sawers@ipc.com>
                               <h4>Parameters</h4>
                               <div style="margin-left: 2em">  <!-- left indent -->
                                 <table  path="{$fullPath}" method="{@name}" class="paramTable">
-                                  <tr style="font-size:16px"><td>Name</td><td class="paramValue">Value</td><td>Data Type</td><td>Parameter Type</td><td>Media Type</td><td>Description</td></tr>
+                                  <tr style="font-size:16px"><td>Name</td><td class="swadl-client">Value</td><td>Data Type</td><td>Parameter Type</td><td>Media Type</td><td>Description</td></tr>
                                   <xsl:call-template name="getParamBlock">
                                     <xsl:with-param name="style" select="'template'"/>
                                   </xsl:call-template>
@@ -327,7 +327,7 @@ Mark Sawers <mark.sawers@ipc.com>
                           </xsl:choose>
 
                           <br/>
-                          <input class="paramValue" type="submit" method="{@name}" value="try it!" path="{$fullPath}" onclick="sendRequest(this);"/>
+                          <input class="swadl-client" type="submit" method="{@name}" value="try it!" path="{$fullPath}" onclick="sendRequest(this);"/>
 
                           <!-- Response -->
                           <xsl:choose>
@@ -480,7 +480,7 @@ Mark Sawers <mark.sawers@ipc.com>
       <xsl:param name="media"/>
       <tr class="param">
         <td><xsl:value-of select="@name"/></td>
-        <td class="paramValue"><input type="text"></input></td>
+        <td class="swadl-client"><input type="text"></input></td>
         <td>
           <xsl:if test="not(@type) and not(@fixed)">
             unspecified type
@@ -547,7 +547,7 @@ Mark Sawers <mark.sawers@ipc.com>
             <xsl:when test="@href or @element">
               <tr class="param">
                 <td>body</td>
-                <td class="paramValue"><textarea rows="5"/></td> 
+                <td class="swadl-client"><textarea rows="5"/></td> 
                 <td>
                   <xsl:variable name="href" select="@href" />
                   <xsl:choose>

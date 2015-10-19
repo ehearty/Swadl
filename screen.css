@@ -1275,6 +1275,10 @@ table {
 .response textarea{
   display:none;
 }
-.paramValue{
+
+/******* Remove "display:none" to expose swadl client *******/
+.swadl-client{
+  /*
   display:none;
+  */
 }
