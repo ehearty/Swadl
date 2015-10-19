@@ -17,6 +17,53 @@
         var win = window.open(xmlDoc,'_blank');
         win.focus();
       }
+      function sendRequest(el){
+        var queryString = "";
+        var body = "";
+        var path = el.getAttribute("path");
+        var method = el.getAttribute("method");
+        var delim = "";
+        var contentHeader = "text/plain";
+        var form = "";
+        /* We have the table */
+        /* Iterate through the parameters to configure the request */
+        var params = document.querySelectorAll('[path="'+path+'"] tr[class="param"]');
+        for (var i=0; i<params.length; i++){
+          var name = params[i].children[0].innerHTML;
+          var value = params[i].children[1].children[0].value;
+          var type = params[i].children[3].innerHTML;
+          var media = params[i].children[4].innerHTML;
+
+          if (media != ""){
+            contentHeader = media;
+          }
+
+          if (type=="template"){
+            path = path.replace("{"+name+"}",value);
+          }
+          else if (type=="query"){
+            form += delim+name+"="+value;
+            if (method == "GET"){
+              queryString = form;
+            }
+            else {
+              body = form;
+            }
+            delim = "&";
+          }
+          else {
+            body = value;
+          }
+        }
+
+        xhttp = new XMLHttpRequest();
+        xhttp.open(method, path+"?"+queryString, false);
+        if (method!="GET"){
+          xhttp.setRequestHeader("Content-type", contentHeader);
+        }
+        xhttp.send(body);
+        alert(xhttp.responseText);
+      }
       function loadWadl(){
         xmlDoc = document.getElementById('input_baseUrl').value;
         document.getElementById('example').innerHTML = '';

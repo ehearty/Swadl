@@ -1258,3 +1258,23 @@ table {
   height:0px;
   overflow:hidden;
 }
+
+.paramTable{
+  width:100%;
+}
+
+.paramTable th{
+  font-weight:bold;
+  padding:6px;
+  border-bottom: 1px solid #c3d9ec;
+}
+
+.paramTable td{
+  text-align:left;
+}
+.response textarea{
+  display:none;
+}
+.paramValue{
+  display:none;
+}
