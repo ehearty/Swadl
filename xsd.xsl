@@ -11,7 +11,7 @@
       <xsl:if test="current()/xs:sequence">
         <xsl:if test="@name">
           <xsl:variable name="schemaName" select="@name"/>
-          <div class="schema_def" target="schema_{$schemaName}">
+          <div class="schema_def" target="schema_of_{$schemaName}">
             <div class="model-signature slider">
               <div class="signature-container">
                 <span class="description">
@@ -55,7 +55,7 @@
         <a target="_blank" href="{$ns-uri}#{$localname}"><xsl:value-of select="$localname"/></a>
       </xsl:when>
       <xsl:when test="$qname">
-        <span class="active_schema schema_{$qname} slideContainer">
+        <span class="active_schema schema_of_{$qname} slideContainer">
           <a onclick="" class="schema_link">
             <xsl:value-of select="$qname"/>
           </a>
