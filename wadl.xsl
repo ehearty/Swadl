@@ -515,7 +515,7 @@ Mark Sawers <mark.sawers@ipc.com>
           <a href="{$ns-uri}#{$localname}"><xsl:value-of select="$localname"/></a>
         </xsl:when>
         <xsl:when test="$qname">
-          <span class="active_schema schema_{$qname} slideContainer">
+          <span class="active_schema schema_of_{$qname} slideContainer">
             <a onclick="" class="schema_link">
               <xsl:value-of select="$qname"/>
             </a>
