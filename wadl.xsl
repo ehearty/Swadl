@@ -85,7 +85,7 @@ Mark Sawers <mark.sawers@ipc.com>
           <p>
             <xsl:for-each select="wadl:grammars/wadl:include">
               <xsl:variable name="href" select="@href"/>
-              <a target="_blank" href="{$href}" class="grammar"><xsl:value-of select="$href"/></a>
+              <a target="_blank" href="{$g_resourcesBase}{$href}" class="grammar"><xsl:value-of select="$href"/></a>
               <xsl:if test="position() != last()"><br/></xsl:if>  <!-- Add a spacer -->
             </xsl:for-each>
           </p>
