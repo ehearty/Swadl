@@ -514,6 +514,10 @@ Mark Sawers <mark.sawers@ipc.com>
         <xsl:when test="$ns-uri and starts-with($ns-uri, 'http://www.w3.org/XML/') = false">
           <a href="{$ns-uri}#{$localname}"><xsl:value-of select="$localname"/></a>
         </xsl:when>
+        <xsl:when test="not($ns-uri) and ($prefix != '') and (count(ancestor::*/namespace::*) = 0)">
+          <!-- we're in Firefox without ns support -->
+          <a><xsl:value-of select="$localname"/></a>
+        </xsl:when>
         <xsl:when test="$qname">
           <span class="active_schema schema_of_{$qname} slideContainer">
             <a onclick="" class="schema_link">
