@@ -511,7 +511,7 @@ Mark Sawers <mark.sawers@ipc.com>
         <xsl:when test="$ns-uri='http://www.w3.org/2001/XMLSchema' or $ns-uri='http://www.w3.org/2001/XMLSchema-instance'">
           <a href="http://www.w3.org/TR/xmlschema-2/#{$localname}"><xsl:value-of select="$localname"/></a>
         </xsl:when>
-        <xsl:when test="$ns-uri and starts-with($ns-uri, 'http://www.w3.org/XML/') = false">
+        <xsl:when test="not(normalize-space($ns-uri) = '') and starts-with($ns-uri, 'http://www.w3.org/XML/') = false">
           <a href="{$ns-uri}#{$localname}"><xsl:value-of select="$localname"/></a>
         </xsl:when>
         <xsl:when test="not($ns-uri) and ($prefix != '') and (count(ancestor::*/namespace::*) = 0)">
